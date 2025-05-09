@@ -1,95 +1,33 @@
 package budgetingapp;
+import budgetingapp.BudgetingDataHandling.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-// === User Class ===
-class User {
-    private String username;
-    private String password;
-
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
-    public String getUsername() { return username; }
-    public boolean authenticate(String pwd) { return this.password.equals(pwd); }
-}
-
-// === Authentication Manager ===
-class Authentication {
-    private static Authentication instance = null;
-    private Map<String, User> users = new HashMap<>();
-
-    private Authentication() {}
-
-    public static Authentication getInstance() {
-        if (instance == null) instance = new Authentication();
-        return instance;
-    }
-
-    public boolean signup(String username, String password) {
-        if (users.containsKey(username)) return false;
-        users.put(username, new User(username, password));
-        return true;
-    }
-
-    public User login(String username, String password) {
-        if (users.containsKey(username)) {
-            User user = users.get(username);
-            return user.authenticate(password) ? user : null;
-        }
-        return null;
-    }
-}
-
-// === Income Class ===
-class Income {
-    private String source;
-    private double amount;
-
-    public Income(String source, double amount) {
-        this.source = source;
-        this.amount = amount;
-    }
-
-    public double getAmount() { return amount; }
-    public String toString() { return source + ": $" + amount; }
-}
-
-// === Expense Class ===
-class Expense {
-    private String category;
-    private double amount;
-
-    public Expense(String category, double amount) {
-        this.category = category;
-        this.amount = amount;
-    }
-
-    public double getAmount() { return amount; }
-    public String toString() { return category + ": $" + amount; }
-}
-
-// === Goal Class ===
-class Goal {
-    private String name;
-    private double target;
-
-    public Goal(String name, double target) {
-        this.name = name;
-        this.target = target;
-    }
-
-    public String toString() { return name + " (Target: $" + target + ")"; }
-}
+/**
+ * Main entry point for the budgeting application.
+ * <p>
+ * Handles user authentication, main menu navigation, and user interactions
+ * for managing incomes, expenses, goals, budgets, reminders, debts, and donations.
+ * Also supports report generation and AI-based spending prediction.
+ * </p>
+ */
 
 // === Main Budgeting App ===
 public class BudgetingApp {
     private static Scanner scanner = new Scanner(System.in);
-    private static List<Income> incomes = new ArrayList<>();
-    private static List<Expense> expenses = new ArrayList<>();
-    private static List<Goal> goals = new ArrayList<>();
+    private static List<Income> incomes = DataStorage.loadList("incomes.dat");
+    private static List<Expense> expenses = DataStorage.loadList("expenses.dat");
+    private static List<Goal> goals = DataStorage.loadList("goals.dat");
+    private static List<Budget> budgets = DataStorage.loadList("budgets.dat");
+    private static List<Debt> debts = DataStorage.loadList("debts.dat");
+    private static List<Reminder> reminders = DataStorage.loadList("reminders.dat");
+    private static List<Donation> donations = DataStorage.loadList("donations.dat");
 
+    /**
+     * Application main method. Handles user authentication and menu navigation.
+     * @param args command-line arguments (not used)
+     */
     public static void main(String[] args) {
         Authentication auth = Authentication.getInstance();
         User currentUser = null;
@@ -114,17 +52,37 @@ public class BudgetingApp {
 
         // Main menu
         int option = -1;
+        System.out.println("Welcome, " + currentUser.getUsername() + "!");
         while (option != 0) {
-            System.out.println("\n1. Add Income\n2. Add Expense\n3. Set Goal\n4. View Summary\n0. Exit");
+            System.out.println("\n1. Add Income");
+            System.out.println("2. Add Expense");
+            System.out.println("3. Set Goal");
+            System.out.println("4. Add Budget");
+            System.out.println("5. Add Reminder");
+            System.out.println("6. Add Debt");
+            System.out.println("7. Add Donation");
+            System.out.println("8. View Summary");
+            System.out.println("9. Generate CSV Report");
+            System.out.println("10. AI Prediction");
+            System.out.println("0. Exit");
             option = scanner.nextInt(); scanner.nextLine();
 
             switch (option) {
                 case 1 -> addIncome();
                 case 2 -> addExpense();
                 case 3 -> addGoal();
-                case 4 -> showSummary();
+                case 4 -> addBudget();
+                case 5 -> addReminder();
+                case 6 -> addDebt();
+                case 7 -> addDonation();
+                case 8 -> showSummary();
+                case 9 -> generateReport();
+                case 10 -> showAIPrediction();
+                case 0 -> System.out.println("Exiting...");
+                default -> System.out.println("Invalid option. Try again.");
             }
         }
+        saveAll();
     }
 
     private static void addIncome() {
@@ -145,6 +103,37 @@ public class BudgetingApp {
         goals.add(new Goal(name, target));
     }
 
+    private static void addBudget() {
+        System.out.print("Budget Category: "); String category = scanner.nextLine();
+        System.out.print("Limit: "); double limit = scanner.nextDouble(); scanner.nextLine();
+        budgets.add(new Budget(category, limit));
+    }
+
+    private static void addReminder() {
+        System.out.print("Message: ");
+        String message = scanner.nextLine();
+        System.out.print("Date and Time (yyyy-MM-dd HH:mm): ");
+        String dateTimeStr = scanner.nextLine();
+        try {
+            LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            reminders.add(new Reminder(message, dateTime));
+        } catch (Exception e) {
+            System.out.println("Invalid date/time format.");
+        }
+    }
+
+    private static void addDebt() {
+        System.out.print("Creditor: "); String creditor = scanner.nextLine();
+        System.out.print("Amount: "); double amount = scanner.nextDouble(); scanner.nextLine();
+        debts.add(new Debt(creditor, amount));
+    }
+
+    private static void addDonation() {
+        System.out.print("Organization: "); String org = scanner.nextLine();
+        System.out.print("Amount: "); double amount = scanner.nextDouble(); scanner.nextLine();
+        donations.add(new Donation(org, amount));
+    }
+
     private static void showSummary() {
         System.out.println("\n--- Incomes ---");
         incomes.forEach(System.out::println);
@@ -154,7 +143,47 @@ public class BudgetingApp {
         expenses.forEach(System.out::println);
         System.out.println("Total Expenses: $" + expenses.stream().mapToDouble(Expense::getAmount).sum());
 
+        System.out.println("\n--- Budgets ---");
+        budgets.forEach(System.out::println);
+
         System.out.println("\n--- Goals ---");
         goals.forEach(System.out::println);
+
+        System.out.println("\n--- Debts ---");
+        debts.forEach(System.out::println);
+        System.out.println("Total Debts: $" + debts.stream().mapToDouble(Debt::getAmount).sum());
+
+        System.out.println("\n--- Reminders ---");
+        reminders.forEach(System.out::println);
+
+        System.out.println("\n--- Donations ---");
+        donations.forEach(System.out::println);
     }
+
+    private static void generateReport() {
+        ReportStrategy report = new CSVReportStrategy();
+        report.generate(
+                incomes, expenses, budgets, goals, debts, reminders, donations, "report.csv"
+        );
+        System.out.println("CSV report generated as report.csv");
+    }
+
+    private static void showAIPrediction() {
+        String prediction = AIPrediction.predictSpendingTrend(expenses);
+        System.out.println(prediction);
+    }
+
+    /**
+     * Saves all financial data to persistent storage.
+     */
+    private static void saveAll() {
+        DataStorage.saveList(incomes, "incomes.dat");
+        DataStorage.saveList(expenses, "expenses.dat");
+        DataStorage.saveList(goals, "goals.dat");
+        DataStorage.saveList(budgets, "budgets.dat");
+        DataStorage.saveList(debts, "debts.dat");
+        DataStorage.saveList(reminders, "reminders.dat");
+        DataStorage.saveList(donations, "donations.dat");
+    }
+
 }

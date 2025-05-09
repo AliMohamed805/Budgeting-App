@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"budgetingapp","l":"BudgetingApp"},{"p":"budgetingapp","l":"BudgetingDataHandling"},{"p":"budgetingapp","l":"BudgetingDataHandling.CSVReportStrategy"},{"p":"budgetingapp","l":"BudgetingDataHandling.ReportStrategy"},{"p":"budgetingapp","l":"UserStorage"}];updateSearchResults();
