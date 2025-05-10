@@ -4,7 +4,6 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.io.Serializable;
 
 /**
  * Provides core data structures and utilities for the budgeting application.
@@ -363,4 +362,85 @@ public class BudgetingDataHandling {
             return "Prediction: Your spending is stable.";
         }
     }
+    
+
+    public static class Wallet {
+        private int walletID;
+        private double balance;
+        private List<Transaction> transactions;
+ 
+        public Wallet(int walletID, double balance) {
+            this.walletID = walletID;
+            this.balance = balance;
+        }
+        public Wallet() {
+            this.walletID = 0;
+            this.balance = 0.0;
+            this.transactions = new ArrayList<>();
+        }
+        public void linkWallet() {
+            System.out.println("Wallet linked successfully.");
+        }
+        public void veiwBalance() {
+            System.out.println("Your current balance is: " + balance);
+        }
+        public int getWalletID() {
+            return walletID;
+        }
+        public double getBalance() {
+            return balance;
+        }
+
+        public void addTransaction(Transaction transaction) {
+            transactions.add(transaction);
+            if(transaction.getCategory().equals("Expense")) {
+                balance -= transaction.getAmount();
+            } else if(transaction.getCategory().equals("Income")) {
+                balance += transaction.getAmount();
+            } 
+            System.out.println("Transaction added successfully.");
+    }
+    public static class Transaction {
+        private String transactionID;
+        private double amount;
+        private String category; 
+        private LocalDateTime dateTime;
+        private boolean reccurring;
+
+        public Transaction(String transactionID, double amount, String type) {
+            this.transactionID = transactionID;
+            this.amount = amount;
+            this.category = type;
+            this.dateTime = LocalDateTime.now();
+            this.reccurring = true;
+        }
+
+        public void cancelTransaction(String transactionID) {
+            reccurring = false;
+            System.out.println("Transaction " + transactionID + " has been cancelled.");
+        }
+        public void viewTransaction() {
+            System.out.println("Transaction ID: " + transactionID);
+            System.out.println("Amount: " + amount);
+            System.out.println("Category: " + category);
+            System.out.println("Date and Time: " + dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' HH:mm")));
+        }
+        public void scheduleTransaction(String transactionID, LocalDateTime dateTime) {
+            this.dateTime = dateTime;
+            reccurring = true;
+            System.out.println("Transaction " + transactionID + " has been scheduled for " + dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' HH:mm")));
+        }
+
+
+        public String getTransactionID() {
+            return transactionID;
+        }
+        public double getAmount() {
+            return amount;
+        }
+        public String getCategory() {
+            return category;
+        }
+    }
+    
 }
