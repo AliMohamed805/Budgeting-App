@@ -1,5 +1,18 @@
 package budgetingapp;
-import budgetingapp.BudgetingDataHandling.*;
+import budgetingapp.BudgetingDataHandling.AIPrediction;
+import budgetingapp.BudgetingDataHandling.Authentication;
+import budgetingapp.BudgetingDataHandling.Budget;
+import budgetingapp.BudgetingDataHandling.CSVReportStrategy;
+import budgetingapp.BudgetingDataHandling.DataStorage;
+import budgetingapp.BudgetingDataHandling.Debt;
+import budgetingapp.BudgetingDataHandling.Donation;
+import budgetingapp.BudgetingDataHandling.Expense;
+import budgetingapp.BudgetingDataHandling.Goal;
+import budgetingapp.BudgetingDataHandling.Income;
+import budgetingapp.BudgetingDataHandling.Reminder;
+import budgetingapp.BudgetingDataHandling.ReportStrategy;
+import budgetingapp.BudgetingDataHandling.User;
+import budgetingapp.BudgetingDataHandling.Wallet;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -30,6 +43,7 @@ public class BudgetingApp {
      */
     public static void main(String[] args) {
         Authentication auth = Authentication.getInstance();
+        Wallet wallet = new Wallet();
         User currentUser = null;
 
         while (currentUser == null) {
@@ -64,6 +78,8 @@ public class BudgetingApp {
             System.out.println("8. View Summary");
             System.out.println("9. Generate CSV Report");
             System.out.println("10. AI Prediction");
+            System.out.println("11. Add Wallet");
+            System.out.println("12. Add Transaction");
             System.out.println("0. Exit");
             option = scanner.nextInt(); scanner.nextLine();
 
@@ -78,6 +94,8 @@ public class BudgetingApp {
                 case 8 -> showSummary();
                 case 9 -> generateReport();
                 case 10 -> showAIPrediction();
+                case 11 -> wallet.addWallet();
+                case 12 -> wallet.addTransaction();
                 case 0 -> System.out.println("Exiting...");
                 default -> System.out.println("Invalid option. Try again.");
             }

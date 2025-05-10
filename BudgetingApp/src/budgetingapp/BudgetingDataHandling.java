@@ -391,7 +391,24 @@ public class BudgetingDataHandling {
             return balance;
         }
 
-        public void addTransaction(Transaction transaction) {
+        public void addWallet() {
+            System.out.println("please enter the wallet ID: ");
+            Scanner scanner = new Scanner(System.in);
+            walletID = scanner.nextInt();
+            System.out.println("please enter the balance: ");   
+            balance = scanner.nextDouble();
+            System.out.println("Wallet added successfully.");
+        }
+
+        public void addTransaction() {
+            System.out.println("please enter the transaction ID: ");
+            Scanner scanner = new Scanner(System.in);
+            String transactionID = scanner.nextLine();
+            System.out.println("please enter the amount: ");
+            double amount = scanner.nextDouble();
+            System.out.println("please enter the category (Expense/Income): ");
+            String category = scanner.next();
+            Transaction transaction = new Transaction(transactionID, amount, category);
             transactions.add(transaction);
             if(transaction.getCategory().equals("Expense")) {
                 balance -= transaction.getAmount();
