@@ -317,6 +317,7 @@ public class BudgetingDataHandling {
                 List<?> reminders,
                 List<?> donations,
                 List<?> wallets,
+                List<?> transactions,
                 String filename
         );
     }
@@ -334,6 +335,7 @@ public class BudgetingDataHandling {
                 List<?> reminders,
                 List<?> donations,
                 List<?> wallets,
+                List<?> transactions,
                 String filename
         ) {
             try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
@@ -346,6 +348,7 @@ public class BudgetingDataHandling {
                 for (Object r : reminders) writer.println("Reminder," + r.toString());
                 for (Object don : donations) writer.println("Donation," + don.toString());
                 for (Object w : wallets) writer.println("wallet," + w.toString());
+                for (Object t : transactions) writer.println("transaction," + t.toString());
             } catch (IOException e) {
                 System.out.println("Error writing CSV: " + e.getMessage());
             }
@@ -385,61 +388,53 @@ public class BudgetingDataHandling {
             System.out.println("Your current balance is: " + balance);
         }
 
-        public void addWallet() {
-            System.out.println("please enter the wallet ID: ");
-            Scanner scanner = new Scanner(System.in);
-            walletID = scanner.nextInt();
-            System.out.println("please enter the balance: ");   
-            balance = scanner.nextDouble();
-            System.out.println("Wallet added successfully.");
-        }
 
-        public void addTransaction() {
-            System.out.println("please enter the transaction ID: ");
-            Scanner scanner = new Scanner(System.in);
-            String transactionID = scanner.nextLine();
-            System.out.println("please enter the amount: ");
-            double amount = scanner.nextDouble();
-            System.out.println("please enter the category (Expense/Income): ");
-            String category = scanner.next();
-            Transaction transaction = new Transaction(transactionID, amount, category);
-            transactions.add(transaction);
-            if(transaction.getCategory().equals("Expense")) {
-                balance -= transaction.getAmount();
-            } else if(transaction.getCategory().equals("Income")) {
-                balance += transaction.getAmount();
-            } 
-            System.out.println("Transaction added successfully.");
-    }
-    public static class Transaction {
-        private String transactionID;
-        private double amount;
-        private String category; 
-        private LocalDateTime dateTime;
-        private boolean reccurring;
-
-        public Transaction(String transactionID, double amount, String type) {
-            this.transactionID = transactionID;
-            this.amount = amount;
-            this.category = type;
-            this.dateTime = LocalDateTime.now();
-            this.reccurring = true;
-        }
-
-        public void viewTransaction() {
-            System.out.println("Transaction ID: " + transactionID);
-            System.out.println("Amount: " + amount);
-            System.out.println("Category: " + category);
-            System.out.println("Date and Time: " + dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' HH:mm")));
-        }
-
-        public double getAmount() {
-            return amount;
-        }
-        public String getCategory() {
-            return category;
-        }
-
-    }
+    //     public void addTransaction() {
+    //         System.out.println("please enter the transaction ID: ");
+    //         Scanner scanner = new Scanner(System.in);
+    //         String transactionID = scanner.nextLine();
+    //         System.out.println("please enter the amount: ");
+    //         double amount = scanner.nextDouble();
+    //         System.out.println("please enter the category (Expense/Income): ");
+    //         String category = scanner.next();
+    //         Transaction transaction = new Transaction(transactionID, amount, category);
+    //         transactions.add(transaction);
+    //         if(transaction.getCategory().equals("Expense")) {
+    //             balance -= transaction.getAmount();
+    //         } else if(transaction.getCategory().equals("Income")) {
+    //             balance += transaction.getAmount();
+    //         } 
+    //         System.out.println("Transaction added successfully.");
+    // }
     
+}
+public static class Transaction {
+    private int transactionID;
+    private double amount;
+    private String category; 
+    private LocalDateTime dateTime;
+    private boolean reccurring;
+
+    public Transaction(int transactionID, double amount, String type) {
+        this.transactionID = transactionID;
+        this.amount = amount;
+        this.category = type;
+        this.dateTime = LocalDateTime.now();
+        this.reccurring = true;
+    }
+
+    public void viewTransaction() {
+        System.out.println("Transaction ID: " + transactionID);
+        System.out.println("Amount: " + amount);
+        System.out.println("Category: " + category);
+        System.out.println("Date and Time: " + dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' HH:mm")));
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+    public String getCategory() {
+        return category;
+    }
+
 }
