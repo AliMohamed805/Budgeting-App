@@ -36,6 +36,7 @@ public class BudgetingApp {
     private static List<Debt> debts = DataStorage.loadList("debts.dat");
     private static List<Reminder> reminders = DataStorage.loadList("reminders.dat");
     private static List<Donation> donations = DataStorage.loadList("donations.dat");
+    private static List<Wallet> wallets = DataStorage.loadList("wallets.dat");
 
     /**
      * Application main method. Handles user authentication and menu navigation.
@@ -176,6 +177,10 @@ public class BudgetingApp {
 
         System.out.println("\n--- Donations ---");
         donations.forEach(System.out::println);
+        
+        System.out.println("\n--- Wallets ---"); 
+        wallets.forEach(System.out::println);
+
     }
 
     private static void generateReport() {

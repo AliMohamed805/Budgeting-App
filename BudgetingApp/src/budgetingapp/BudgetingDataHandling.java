@@ -316,6 +316,7 @@ public class BudgetingDataHandling {
                 List<?> debts,
                 List<?> reminders,
                 List<?> donations,
+                List<?> wallets,
                 String filename
         );
     }
@@ -332,6 +333,7 @@ public class BudgetingDataHandling {
                 List<?> debts,
                 List<?> reminders,
                 List<?> donations,
+                List<?> wallets,
                 String filename
         ) {
             try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
@@ -343,6 +345,7 @@ public class BudgetingDataHandling {
                 for (Object d : debts) writer.println("Debt," + d.toString());
                 for (Object r : reminders) writer.println("Reminder," + r.toString());
                 for (Object don : donations) writer.println("Donation," + don.toString());
+                for (Object w : wallets) writer.println("wallet," + w.toString());
             } catch (IOException e) {
                 System.out.println("Error writing CSV: " + e.getMessage());
             }
@@ -378,17 +381,8 @@ public class BudgetingDataHandling {
             this.balance = 0.0;
             this.transactions = new ArrayList<>();
         }
-        public void linkWallet() {
-            System.out.println("Wallet linked successfully.");
-        }
         public void veiwBalance() {
             System.out.println("Your current balance is: " + balance);
-        }
-        public int getWalletID() {
-            return walletID;
-        }
-        public double getBalance() {
-            return balance;
         }
 
         public void addWallet() {
@@ -432,32 +426,20 @@ public class BudgetingDataHandling {
             this.reccurring = true;
         }
 
-        public void cancelTransaction(String transactionID) {
-            reccurring = false;
-            System.out.println("Transaction " + transactionID + " has been cancelled.");
-        }
         public void viewTransaction() {
             System.out.println("Transaction ID: " + transactionID);
             System.out.println("Amount: " + amount);
             System.out.println("Category: " + category);
             System.out.println("Date and Time: " + dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' HH:mm")));
         }
-        public void scheduleTransaction(String transactionID, LocalDateTime dateTime) {
-            this.dateTime = dateTime;
-            reccurring = true;
-            System.out.println("Transaction " + transactionID + " has been scheduled for " + dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' HH:mm")));
-        }
 
-
-        public String getTransactionID() {
-            return transactionID;
-        }
         public double getAmount() {
             return amount;
         }
         public String getCategory() {
             return category;
         }
+
     }
     
 }
