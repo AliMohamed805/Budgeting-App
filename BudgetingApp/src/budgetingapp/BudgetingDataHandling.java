@@ -18,13 +18,16 @@ public class BudgetingDataHandling {
     static class User implements Serializable {
         /**
          * Constructs a new user.
+         *
          * @param username the username
          * @param password the password
          */
         private String username;
         private String password;
+
         /**
          * Constructs a new user.
+         *
          * @param username the username
          * @param password the password
          */
@@ -32,17 +35,25 @@ public class BudgetingDataHandling {
             this.username = username;
             this.password = password;
         }
+
         /**
          * Gets the username.
+         *
          * @return the username
          */
-        public String getUsername() { return username; }
+        public String getUsername() {
+            return username;
+        }
+
         /**
          * Checks if the provided password matches.
+         *
          * @param pwd the password to check
          * @return true if the password matches, false otherwise
          */
-        public boolean authenticate(String pwd) { return this.password.equals(pwd); }
+        public boolean authenticate(String pwd) {
+            return this.password.equals(pwd);
+        }
     }
 
     /**
@@ -51,17 +62,24 @@ public class BudgetingDataHandling {
     static class Authentication {
         /**
          * Gets the singleton instance.
+         *
          * @return the authentication instance
          */
         private static Authentication instance = null;
         private Map<String, User> users = new HashMap<>();
-        private Authentication() { users = UserStorage.loadUsers(); }
+
+        private Authentication() {
+            users = UserStorage.loadUsers();
+        }
+
         public static Authentication getInstance() {
             if (instance == null) instance = new Authentication();
             return instance;
         }
+
         /**
          * Registers a new user.
+         *
          * @param username the username
          * @param password the password
          * @return true if successful, false if username exists
@@ -72,8 +90,10 @@ public class BudgetingDataHandling {
             UserStorage.saveUsers(users);
             return true;
         }
+
         /**
          * Logs in a user.
+         *
          * @param username the username
          * @param password the password
          * @return the user if credentials are valid, null otherwise
@@ -88,13 +108,15 @@ public class BudgetingDataHandling {
     }
 
     /**
-     *  Represents an income entry.
+     * Represents an income entry.
      */
     static class Income implements Serializable {
         private String source;
         private double amount;
+
         /**
          * Constructs an income entry.
+         *
          * @param source the source of income
          * @param amount the amount of income
          */
@@ -102,16 +124,24 @@ public class BudgetingDataHandling {
             this.source = source;
             this.amount = amount;
         }
+
         /**
          * Gets the amount of income.
+         *
          * @return the income amount
          */
-        public double getAmount() { return amount; }
+        public double getAmount() {
+            return amount;
+        }
+
         /**
          * Returns a string representation of the income.
+         *
          * @return the string representation
          */
-        public String toString() { return source + ": $" + amount; }
+        public String toString() {
+            return source + ": $" + amount;
+        }
     }
 
     /**
@@ -120,25 +150,35 @@ public class BudgetingDataHandling {
     static class Expense implements Serializable {
         private String category;
         private double amount;
+
         /**
          * Constructs an expense entry.
+         *
          * @param category the expense category
-         * @param amount the expense amount
+         * @param amount   the expense amount
          */
         public Expense(String category, double amount) {
             this.category = category;
             this.amount = amount;
         }
+
         /**
          * Gets the amount of the expense.
+         *
          * @return the expense amount
          */
-        public double getAmount() { return amount; }
+        public double getAmount() {
+            return amount;
+        }
+
         /**
          * Returns a string representation of the expense.
+         *
          * @return the string representation
          */
-        public String toString() { return category + ": $" + amount; }
+        public String toString() {
+            return category + ": $" + amount;
+        }
     }
 
     /**
@@ -147,20 +187,26 @@ public class BudgetingDataHandling {
     static class Goal implements Serializable {
         private String name;
         private double target;
+
         /**
          * Constructs a financial goal.
-         * @param name the goal name
+         *
+         * @param name   the goal name
          * @param target the target amount
          */
         public Goal(String name, double target) {
             this.name = name;
             this.target = target;
         }
+
         /**
          * Returns a string representation of the goal.
+         *
          * @return the string representation
          */
-        public String toString() { return name + " (Target: $" + target + ")"; }
+        public String toString() {
+            return name + " (Target: $" + target + ")";
+        }
     }
 
     /**
@@ -169,20 +215,26 @@ public class BudgetingDataHandling {
     static class Budget implements Serializable {
         private String category;
         private double limit;
+
         /**
          * Constructs a budget.
+         *
          * @param category the budget category
-         * @param limit the budget limit
+         * @param limit    the budget limit
          */
         public Budget(String category, double limit) {
             this.category = category;
             this.limit = limit;
         }
+
         /**
          * Returns a string representation of the budget.
+         *
          * @return the string representation
          */
-        public String toString() { return category + " Budget: $" + limit; }
+        public String toString() {
+            return category + " Budget: $" + limit;
+        }
     }
 
     /**
@@ -191,17 +243,21 @@ public class BudgetingDataHandling {
     static class Reminder implements Serializable {
         private String message;
         private LocalDateTime dateTime;
+
         /**
          * Constructs a reminder.
-         * @param message the reminder message
+         *
+         * @param message  the reminder message
          * @param dateTime the date and time of the reminder
          */
         public Reminder(String message, LocalDateTime dateTime) {
             this.message = message;
             this.dateTime = dateTime;
         }
+
         /**
          * Returns a string representation of the reminder.
+         *
          * @return the string representation
          */
         public String toString() {
@@ -216,27 +272,35 @@ public class BudgetingDataHandling {
     static class Debt implements Serializable {
         private String creditor;
         private double amount;
+
         /**
          * Constructs a debt entry.
+         *
          * @param creditor the creditor's name
-         * @param amount the amount owed
+         * @param amount   the amount owed
          */
         public Debt(String creditor, double amount) {
             this.creditor = creditor;
             this.amount = amount;
         }
+
         /**
          * Gets the amount of the debt.
+         *
          * @return the debt amount
          */
         public double getAmount() {
             return amount;
         }
+
         /**
          * Returns a string representation of the debt.
+         *
          * @return the string representation
          */
-        public String toString() { return "Debt to " + creditor + ": $" + amount; }
+        public String toString() {
+            return "Debt to " + creditor + ": $" + amount;
+        }
     }
 
     /**
@@ -245,20 +309,26 @@ public class BudgetingDataHandling {
     static class Donation implements Serializable {
         private String organization;
         private double amount;
+
         /**
          * Constructs a donation entry.
+         *
          * @param organization the organization name
-         * @param amount the donation amount
+         * @param amount       the donation amount
          */
         public Donation(String organization, double amount) {
             this.organization = organization;
             this.amount = amount;
         }
+
         /**
          * Returns a string representation of the donation.
+         *
          * @return the string representation
          */
-        public String toString() { return "Donation to " + organization + ": $" + amount; }
+        public String toString() {
+            return "Donation to " + organization + ": $" + amount;
+        }
     }
 
     /**
@@ -267,7 +337,8 @@ public class BudgetingDataHandling {
     static class DataStorage {
         /**
          * Saves a list to a file.
-         * @param list the list to save
+         *
+         * @param list     the list to save
          * @param filename the file name
          */
         public static void saveList(List<?> list, String filename) {
@@ -277,6 +348,7 @@ public class BudgetingDataHandling {
                 System.out.println("Error saving data: " + e.getMessage());
             }
         }
+
         @SuppressWarnings("unchecked")
         /**
          * Loads a list from a file.
@@ -299,14 +371,15 @@ public class BudgetingDataHandling {
     public interface ReportStrategy {
         /**
          * Generates a report file from the provided data.
-         * @param incomes list of incomes
-         * @param expenses list of expenses
-         * @param budgets list of budgets
-         * @param goals list of goals
-         * @param debts list of debts
+         *
+         * @param incomes   list of incomes
+         * @param expenses  list of expenses
+         * @param budgets   list of budgets
+         * @param goals     list of goals
+         * @param debts     list of debts
          * @param reminders list of reminders
          * @param donations list of donations
-         * @param filename the output file name
+         * @param filename  the output file name
          */
         void generate(
                 List<?> incomes,
@@ -361,6 +434,7 @@ public class BudgetingDataHandling {
     static class AIPrediction {
         /**
          * Predicts spending trends based on expenses.
+         *
          * @param expenses the list of expenses
          * @return a prediction string
          */
@@ -368,73 +442,81 @@ public class BudgetingDataHandling {
             return "Prediction: Your spending is stable.";
         }
     }
-    
 
-    public static class Wallet {
+
+    /**
+     * Represents a user's wallet for managing balance and transactions.
+     */
+    public static class Wallet implements Serializable {
         private int walletID;
         private double balance;
         private List<Transaction> transactions;
- 
+
+        /**
+         * Constructs a wallet with a specific ID and balance.
+         *
+         * @param walletID the wallet's unique identifier
+         * @param balance  the initial balance of the wallet
+         */
         public Wallet(int walletID, double balance) {
             this.walletID = walletID;
             this.balance = balance;
         }
+
+        /**
+         * Constructs a wallet with default values.
+         */
         public Wallet() {
             this.walletID = 0;
             this.balance = 0.0;
             this.transactions = new ArrayList<>();
         }
-        public void veiwBalance() {
-            System.out.println("Your current balance is: " + balance);
+
+        /**
+         * Returns a string representation of the wallet.
+         *
+         * @return the string representation
+         */
+        @Override
+        public String toString() {
+            return "Wallet ID: " + walletID + ", Balance: $" + String.format("%.2f", balance);
+        }
+    }
+
+    /**
+     * Represents a financial transaction within a wallet.
+     */
+    public static class Transaction implements Serializable {
+        private int transactionID;
+        private double amount;
+        private String category;
+        private LocalDateTime dateTime;
+
+        /**
+         * Constructs a transaction with the specified details.
+         *
+         * @param transactionID the transaction's unique identifier
+         * @param amount        the amount of the transaction
+         * @param type          the category or type (e.g., Income, Expense)
+         */
+        public Transaction(int transactionID, double amount, String type) {
+            this.transactionID = transactionID;
+            this.amount = amount;
+            this.category = type;
+            this.dateTime = LocalDateTime.now();
         }
 
-
-    //     public void addTransaction() {
-    //         System.out.println("please enter the transaction ID: ");
-    //         Scanner scanner = new Scanner(System.in);
-    //         String transactionID = scanner.nextLine();
-    //         System.out.println("please enter the amount: ");
-    //         double amount = scanner.nextDouble();
-    //         System.out.println("please enter the category (Expense/Income): ");
-    //         String category = scanner.next();
-    //         Transaction transaction = new Transaction(transactionID, amount, category);
-    //         transactions.add(transaction);
-    //         if(transaction.getCategory().equals("Expense")) {
-    //             balance -= transaction.getAmount();
-    //         } else if(transaction.getCategory().equals("Income")) {
-    //             balance += transaction.getAmount();
-    //         } 
-    //         System.out.println("Transaction added successfully.");
-    // }
-    
-}
-public static class Transaction {
-    private int transactionID;
-    private double amount;
-    private String category; 
-    private LocalDateTime dateTime;
-    private boolean reccurring;
-
-    public Transaction(int transactionID, double amount, String type) {
-        this.transactionID = transactionID;
-        this.amount = amount;
-        this.category = type;
-        this.dateTime = LocalDateTime.now();
-        this.reccurring = true;
+        /**
+         * Returns a string representation of the transaction.
+         *
+         * @return the string representation
+         */
+        @Override
+        public String toString() {
+            return "Transaction ID: " + transactionID +
+                    ", Amount: $" + String.format("%.2f", amount) +
+                    ", Category: " + category +
+                    ", Date: " + dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        }
     }
-
-    public void viewTransaction() {
-        System.out.println("Transaction ID: " + transactionID);
-        System.out.println("Amount: " + amount);
-        System.out.println("Category: " + category);
-        System.out.println("Date and Time: " + dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' HH:mm")));
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-    public String getCategory() {
-        return category;
-    }
-
 }

@@ -204,7 +204,7 @@ public class BudgetingApp {
     private static void generateReport() {
         ReportStrategy report = new CSVReportStrategy();
         report.generate(
-                incomes, expenses, budgets, goals, debts, reminders, donations, "report.csv"
+                incomes, expenses, budgets, goals, debts, reminders, donations, wallets, transactions, "report.csv"
         );
         System.out.println("CSV report generated as report.csv");
     }
@@ -225,6 +225,8 @@ public class BudgetingApp {
         DataStorage.saveList(debts, "debts.dat");
         DataStorage.saveList(reminders, "reminders.dat");
         DataStorage.saveList(donations, "donations.dat");
+        DataStorage.saveList(wallets, "wallets.dat");
+        DataStorage.saveList(transactions, "transactions.dat");
     }
 
 }
